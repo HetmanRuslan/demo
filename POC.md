@@ -27,6 +27,7 @@ kubectl get svc -n default argocd-server -o wide
 
 Відкрийте браузер та перейдіть за посиланням http://<External_IP> і використайте логін admin та згенерований пароль для входу.
 
-![Демонстрація](demo.gif)
+![Демонстрація](https://github.com/HetmanRuslan/demo/blob/main/bin/demo.gif)
+
 
 
