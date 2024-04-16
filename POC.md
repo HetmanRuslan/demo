@@ -27,6 +27,6 @@ kubectl get svc -n default argocd-server -o wide
 
 Відкрийте браузер та перейдіть за посиланням http://<External_IP> і використайте логін admin та згенерований пароль для входу.
 
-Демонстрація
-<script src="https://cdn.jsdelivr.net/npm/asciinema-player@2.11.2/dist/asciinema-player.min.js"></script>
-<asciinema-player src="demo1.cast"></asciinema-player>
+![Демонстрація](demo.gif)
+
+
