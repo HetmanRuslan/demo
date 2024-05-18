@@ -1,0 +1,47 @@
+ENABLE_GITLEAKS=$(git config --bool hooks.gitleaks-enabled)
+
+if [ "$ENABLE_GITLEAKS" != "true" ]; then
+    echo "Gitleaks check is disabled. Proceeding with commit."
+    exit 0
+fi
+
+
+OS=$(uname)
+GITLEAKS_VERSION="8.17.0" 
+
+install_gitleaks() {
+    if [ "$OS" = "Linux" ]; then
+        curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v$GITLEAKS_VERSION/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz -o gitleaks.tar.gz
+        tar -xzf gitleaks.tar.gz
+        chmod +x gitleaks
+        sudo mv gitleaks /usr/local/bin/gitleaks
+        rm gitleaks.tar.gz
+    elif [ "$OS" = "Darwin" ]; then
+        curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v$GITLEAKS_VERSION/gitleaks_${GITLEAKS_VERSION}_darwin_x64.tar.gz -o gitleaks.tar.gz
+        tar -xzf gitleaks.tar.gz
+        chmod +x gitleaks
+        sudo mv gitleaks /usr/local/bin/gitleaks
+        rm gitleaks.tar.gz
+    else
+        echo "Unsupported OS: $OS"
+        exit 1
+    fi
+}
+
+
+if ! command -v gitleaks &> /dev/null
+then
+    echo "gitleaks could not be found, installing it..."
+    install_gitleaks
+fi
+
+
+gitleaks detect --source . --exit-code 1
+
+if [ $? -ne 0 ]; then
+    echo "Secrets detected. Commit rejected."
+    exit 1
+fi
+
+echo "No secrets found. Proceeding with commit."
+exit 0
